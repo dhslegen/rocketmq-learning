@@ -14,6 +14,7 @@ import java.util.List;
  * @date 2019/11/5
  */
 public class Consumer {
+
     public static void main(String[] args) throws InterruptedException, MQClientException {
 
         // Instantiate with specified consumer group name.
@@ -23,8 +24,7 @@ public class Consumer {
         consumer.setNamesrvAddr("localhost:9876");
 
         // Subscribe one more more topics to consume.
-        consumer.subscribe("TopicS", "*");
-        consumer.subscribe("TopicA", "*");
+        consumer.subscribe("TopicTest", "*");
         // Register callback to execute on arrival of messages fetched from brokers.
         consumer.registerMessageListener(new MessageListenerConcurrently() {
 
@@ -41,4 +41,5 @@ public class Consumer {
 
         System.out.printf("Consumer Started.%n");
     }
+
 }
