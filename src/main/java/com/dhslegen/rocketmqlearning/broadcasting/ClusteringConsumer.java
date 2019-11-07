@@ -14,7 +14,7 @@ import java.util.List;
  * @author dhslegen
  * @date 2019/11/6
  */
-public class BroadcastConsumer {
+public class ClusteringConsumer {
 
     public static void main(String[] args) throws Exception {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("example_group_name");
@@ -22,7 +22,7 @@ public class BroadcastConsumer {
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 
         //set to broadcast mode
-        consumer.setMessageModel(MessageModel.BROADCASTING);
+        consumer.setMessageModel(MessageModel.CLUSTERING);
 
         consumer.subscribe("TopicTest", "TagA || TagC || TagD");
 

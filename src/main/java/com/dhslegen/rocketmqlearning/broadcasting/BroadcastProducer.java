@@ -6,6 +6,7 @@ import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 
 public class BroadcastProducer {
+
     public static void main(String[] args) throws Exception {
         DefaultMQProducer producer = new DefaultMQProducer("ProducerGroupName");
         producer.start();
@@ -20,4 +21,5 @@ public class BroadcastProducer {
         }
         producer.shutdown();
     }
+
 }

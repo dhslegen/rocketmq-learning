@@ -14,7 +14,7 @@ import java.util.List;
  * @author dhslegen
  * @date 2019/11/6
  */
-public class BroadcastConsumer {
+public class BroadcastConsumerCopy {
 
     public static void main(String[] args) throws Exception {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("example_group_name");

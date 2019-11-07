@@ -23,18 +23,19 @@ public class OrderedProducer {
         producer.start();
         String[] tags = new String[]{"TagA", "TagB", "TagC", "TagD", "TagE"};
         for (int i = 0; i < 100; i++) {
-            int orderId = i % 10;
             //Create a message instance, specifying topic, tag and message body.
-            Message msg = new Message("TopicTestjjj", tags[i % tags.length], "KEY" + i,
+            Message msg = new Message("TopicTest", tags[i % tags.length], "KEY" + i,
                     ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
             SendResult sendResult = producer.send(msg, new MessageQueueSelector() {
                 @Override
                 public MessageQueue select(List<MessageQueue> mqs, Message msg, Object arg) {
                     Integer id = (Integer) arg;
                     int index = id % mqs.size();
+                    System.out.println("order id: " + id);
+                    System.out.println("mq index: " + index);
                     return mqs.get(index);
                 }
-            }, orderId);
+            }, i);
 
             System.out.printf("%s%n", sendResult);
         }

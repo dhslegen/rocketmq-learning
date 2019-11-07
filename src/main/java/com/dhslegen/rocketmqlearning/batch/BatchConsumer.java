@@ -1,43 +1,40 @@
-package com.dhslegen.rocketmqlearning.broadcasting;
+package com.dhslegen.rocketmqlearning.batch;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
-import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
-import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 
 import java.util.List;
 
 /**
  * @author dhslegen
- * @date 2019/11/6
+ * @date 2019/11/7
  */
-public class BroadcastConsumer {
+public class BatchConsumer {
 
     public static void main(String[] args) throws Exception {
+        // Instantiate with specified consumer group name.
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("example_group_name");
 
-        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-
-        //set to broadcast mode
-        consumer.setMessageModel(MessageModel.BROADCASTING);
-
-        consumer.subscribe("TopicTest", "TagA || TagC || TagD");
-
+        // Subscribe one more more topics to consume.
+        consumer.subscribe("TopicTest", "*");
+        // Register callback to execute on arrival of messages fetched from brokers.
         consumer.registerMessageListener(new MessageListenerConcurrently() {
 
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
                                                             ConsumeConcurrentlyContext context) {
-                System.out.printf(Thread.currentThread().getName() + " Receive New Messages: " + msgs + "%n");
+                System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs);
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
         });
 
+        //Launch the consumer instance.
         consumer.start();
-        System.out.printf("Broadcast Consumer Started.%n");
+
+        System.out.printf("Consumer Started.%n");
     }
 
 }
