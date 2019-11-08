@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- 每天产生一个文件 -->
+    <appender name="PROD_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <!-- 文件路径 -->
+        <file>${LOG_FILE_PATH}/manager.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 文件名称 -->
+            <fileNamePattern>${LOG_FILE_PATH}/manager.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 文件最大保存历史数量 -->
+            <MaxHistory>100</MaxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${PATTERN}</pattern>
+        </layout>
+    </appender>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <appender name="mqAppender1" class="org.apache.rocketmq.logappender.logback.RocketmqLogbackAppender">
+        <tag>TagA</tag>
+        <topic>TopicTest</topic>
+        <producerGroup>please_rename_unique_group_name</producerGroup>
+        <nameServerAddress>10.3.23.32:9876</nameServerAddress>
+        <layout>
+            <pattern>%date %p %t - %m%n</pattern>
+        </layout>
+    </appender>
+
+    <appender name="mqAsyncAppender1" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>1024</queueSize>
+        <discardingThreshold>80</discardingThreshold>
+        <maxFlushTime>2000</maxFlushTime>
+        <neverBlock>true</neverBlock>
+        <appender-ref ref="mqAppender1"/>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="PROD_FILE"/>
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="mqAppender1"/>
+    </root>
+
+</configuration>
